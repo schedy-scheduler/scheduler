@@ -29,7 +29,11 @@ export const Switch: React.FC<ISwitchProps> = ({ name, label, ...props }) => {
   if (!name) {
     return (
       <div className="flex flex-col gap-1">
-        {label && <Label htmlFor={name}>{label}</Label>}
+        {label && (
+          <Label htmlFor={name} className="text-xs sm:text-sm">
+            {label}
+          </Label>
+        )}
         <SwitchUI id={name} {...props} />
       </div>
     );
@@ -41,7 +45,11 @@ export const Switch: React.FC<ISwitchProps> = ({ name, label, ...props }) => {
       name={name}
       render={({ field, fieldState: { error } }) => (
         <div className="flex flex-col gap-1">
-          {label && <Label htmlFor={name}>{label}</Label>}
+          {label && (
+            <Label htmlFor={name} className="text-xs sm:text-sm">
+              {label}
+            </Label>
+          )}
           <SwitchUI
             id={name}
             checked={field.value}

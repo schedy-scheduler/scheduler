@@ -100,16 +100,22 @@ export const Customers: React.FC = () => {
         const user = row.original;
 
         return (
-          <div className="flex items-center">
-            <Button variant="ghost" size="sm" onClick={() => handleEdit(user)}>
-              <Pencil />
+          <div className="flex items-center gap-1 sm:gap-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleEdit(user)}
+              className="h-7 sm:h-8 px-1.5 sm:px-2.5"
+            >
+              <Pencil size={16} />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleDelete(user.id)}
+              className="h-7 sm:h-8 px-1.5 sm:px-2.5"
             >
-              <Trash2 />
+              <Trash2 size={16} />
             </Button>
           </div>
         );
@@ -123,9 +129,10 @@ export const Customers: React.FC = () => {
         title="Meus clientes"
         subtitle="Gerêncie seus clientes aqui."
         buttons={[
-          <Button onClick={handleAddNew}>
-            <Plus />
-            Novo cliente
+          <Button onClick={handleAddNew} size="sm" className="w-full sm:w-auto">
+            <Plus size={16} />
+            <span className="hidden sm:inline">Novo cliente</span>
+            <span className="sm:hidden">Novo</span>
           </Button>,
         ]}
       />

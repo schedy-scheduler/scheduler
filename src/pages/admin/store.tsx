@@ -163,18 +163,21 @@ export const Store: React.FC = () => {
 
   return (
     <FormProvider {...form}>
-      <form className="w-full flex flex-col gap-5" onSubmit={handleSubmit}>
+      <form
+        className="w-full flex flex-col gap-4 sm:gap-5"
+        onSubmit={handleSubmit}
+      >
         <PageHeader
           title="Meu estabelecimento"
           subtitle="Gerêncie seu estabelecimento."
         />
 
-        <div className="w-full border p-3 rounded-lg flex flex-col gap-3">
-          <strong className="font-semibold text-xs text-zinc-600">
+        <div className="w-full border p-3 sm:p-4 rounded-lg flex flex-col gap-3 sm:gap-4">
+          <strong className="font-semibold text-xs sm:text-sm text-zinc-600">
             Dados do estabelecimento
           </strong>
 
-          <div className="flex items-center gap-5 w-full">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5 w-full">
             <div className="flex-1">
               <Input
                 name="name"
@@ -191,7 +194,7 @@ export const Store: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-5 w-full">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5 w-full">
             <div className="flex-1">
               <Input
                 name="phone"
@@ -203,15 +206,15 @@ export const Store: React.FC = () => {
               <InputWithPrefix
                 name="slug"
                 label="Prefixo"
-                placeholder="Defina qual vai ser o link para acessar seu calendário"
+                placeholder="Link para seu calendário"
                 prefix="https://calendario.com/"
               />
             </div>
           </div>
         </div>
 
-        <div className="w-full border p-3 rounded-lg flex flex-col gap-3">
-          <strong className="font-semibold text-xs text-zinc-600">
+        <div className="w-full border p-3 sm:p-4 rounded-lg flex flex-col gap-3 sm:gap-4">
+          <strong className="font-semibold text-xs sm:text-sm text-zinc-600">
             Horário de funcionamento
           </strong>
 
@@ -226,8 +229,12 @@ export const Store: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-end">
-          <Button type="submit" disabled={isSaving}>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-end gap-2 sm:gap-3">
+          <Button
+            type="submit"
+            disabled={isSaving}
+            className="w-full sm:w-auto"
+          >
             {isSaving ? "Salvando..." : "Salvar"}
           </Button>
         </div>

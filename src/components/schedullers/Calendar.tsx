@@ -19,8 +19,8 @@ const CalendarHeader: React.FC<{ onNewSchedulingClick: () => void }> = ({
     }
 
     if (view === "week") {
-      const startOfWeek = currentDate.startOf("week").format("DD [de] MMMM");
-      const endOfWeek = currentDate.endOf("week").format("DD [de] MMMM YYYY");
+      const startOfWeek = currentDate.startOf("week").format("DD [de] MMM");
+      const endOfWeek = currentDate.endOf("week").format("DD [de] MMM YYYY");
       return `${startOfWeek} - ${endOfWeek}`;
     }
 
@@ -32,48 +32,65 @@ const CalendarHeader: React.FC<{ onNewSchedulingClick: () => void }> = ({
   }, [currentDate, view]);
 
   return (
-    <div className="flex items-center justify-between pb-2">
-      <div className="flex items-center gap-2">
-        <ChevronLeft
-          className="cursor-pointer text-zinc-500"
-          size={18}
-          onClick={() => prevPeriod()}
-        />
-        <span>{currentDateText}</span>
-        <ChevronRight
-          className="cursor-pointer text-zinc-500"
-          size={18}
-          onClick={() => nextPeriod()}
-        />
+    <div className="flex flex-col gap-3 pb-2">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 flex-1 min-w-0">
+          <ChevronLeft
+            className="cursor-pointer text-zinc-500 flex-shrink-0"
+            size={18}
+            onClick={() => prevPeriod()}
+          />
+          <span className="text-sm sm:text-base truncate">
+            {currentDateText}
+          </span>
+          <ChevronRight
+            className="cursor-pointer text-zinc-500 flex-shrink-0"
+            size={18}
+            onClick={() => nextPeriod()}
+          />
+        </div>
+        <Button
+          className="ml-auto flex-shrink-0 text-xs sm:text-sm"
+          onClick={onNewSchedulingClick}
+        >
+          <Plus size={16} className="sm:size-5" />
+          <span className="hidden sm:inline">Agendamento</span>
+        </Button>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-1 sm:gap-2">
         <Button
           variant={view === "day" ? "default" : "outline"}
           onClick={() => setView("day")}
+          size="sm"
+          className="text-xs"
         >
           Dia
         </Button>
         <Button
           variant={view === "week" ? "default" : "outline"}
           onClick={() => setView("week")}
+          size="sm"
+          className="text-xs"
         >
           Semana
         </Button>
         <Button
           variant={view === "month" ? "default" : "outline"}
           onClick={() => setView("month")}
+          size="sm"
+          className="text-xs"
         >
           Mês
         </Button>
 
-        <Button variant="secondary" onClick={() => today()}>
+        <Button
+          variant="secondary"
+          onClick={() => today()}
+          size="sm"
+          className="text-xs"
+        >
           Hoje
-        </Button>
-
-        <Button className="ml-5" onClick={onNewSchedulingClick}>
-          <Plus size={20} />
-          Agendamento
         </Button>
       </div>
     </div>

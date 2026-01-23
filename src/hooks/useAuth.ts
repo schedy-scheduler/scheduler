@@ -31,17 +31,18 @@ export const useAuth = () => {
     authService.getSession().then((result) => {
       if (result.data?.user) {
         loadUserWithStore(result.data.user);
+      } else {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     // Listen for auth changes
     const subscription = authService.onAuthStateChange((_event, session) => {
-      if (session && typeof session === "object" && "user" in session) {
-        const sessionObj = session as { user: User };
-        loadUserWithStore(sessionObj.user);
+      if (session?.user) {
+        loadUserWithStore(session.user);
       } else {
         setUser(null);
+        setLoading(false);
       }
     });
 
@@ -62,12 +63,14 @@ export const useAuth = () => {
       };
 
       setUser(authUserWithStore);
+      setLoading(false);
     } catch (error) {
       console.error("Erro ao carregar dados do usuário:", error);
       setUser({
         ...authUser,
         name: authUser.user_metadata?.name || authUser.email?.split("@")[0],
       });
+      setLoading(false);
     }
   };
 

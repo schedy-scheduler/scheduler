@@ -44,9 +44,7 @@ export const OnboardingModal: React.FC<IOnboardingModalProps> = ({
   onClose,
   onComplete,
 }) => {
-  const [isUploading, setIsUploading] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string>("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const [slugError, setSlugError] = useState<string>("");
   const { addToast } = useToast();
 
@@ -60,30 +58,6 @@ export const OnboardingModal: React.FC<IOnboardingModalProps> = ({
       closing_hours: "18:00",
     },
   });
-
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validar tipo de arquivo
-    if (!file.type.startsWith("image/")) {
-      addToast("Selecione uma imagem válida", "error");
-      return;
-    }
-
-    // Validar tamanho (máximo 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      addToast("A imagem deve ter no máximo 5MB", "error");
-      return;
-    }
-
-    setSelectedFile(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
 
   const handleSlugChange = async (slug: string) => {
     form.setValue("slug", slug);
@@ -110,27 +84,9 @@ export const OnboardingModal: React.FC<IOnboardingModalProps> = ({
       return;
     }
 
-    setIsUploading(true);
+    setIsSaving(true);
 
     try {
-      let imageUrl = "";
-
-      // Upload da imagem se selecionada
-      if (selectedFile) {
-        const uploadResult = await storeService.uploadStoreImage(
-          storeId,
-          selectedFile,
-        );
-
-        if (uploadResult.error) {
-          addToast("Erro ao fazer upload da imagem", "error");
-          setIsUploading(false);
-          return;
-        }
-
-        imageUrl = uploadResult.data || "";
-      }
-
       // Atualizar store com os dados do onboarding
       const updateData: Record<string, string | boolean> = {
         slug: data.slug || "",
@@ -138,26 +94,23 @@ export const OnboardingModal: React.FC<IOnboardingModalProps> = ({
         phone: data.phone || "",
         opening_hours: data.opening_hours || "09:00",
         closing_hours: data.closing_hours || "18:00",
+        onboarding_completed: true,
       };
-
-      if (imageUrl) {
-        updateData.image_url = imageUrl;
-      }
 
       const result = await storeService.update(storeId, updateData);
 
       if (result.error) {
         addToast("Erro ao salvar dados do estabelecimento", "error");
-        setIsUploading(false);
+        setIsSaving(false);
         return;
       }
 
       addToast("Dados do estabelecimento salvos com sucesso!", "success");
-      setIsUploading(false);
+      setIsSaving(false);
       onComplete();
     } catch (error) {
       addToast("Erro ao salvar dados", "error");
-      setIsUploading(false);
+      setIsSaving(false);
     }
   });
 
@@ -168,23 +121,25 @@ export const OnboardingModal: React.FC<IOnboardingModalProps> = ({
         description="Vamos configurar seu estabelecimento para começar."
         isOpen={isOpen}
         onClose={onClose}
-        confirmButtonText={isUploading ? "Salvando..." : "Concluir"}
+        confirmButtonText={isSaving ? "Salvando..." : "Concluir"}
         onConfirmButtonClick={handleSubmit}
         cancelButtonText="Configurar depois"
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 max-h-[60vh] overflow-y-auto">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">
+            <label className="text-xs sm:text-sm font-medium">
               URL do Estabelecimento
             </label>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-zinc-500">agendamentos.com/</span>
+            <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+              <span className="text-xs sm:text-sm text-zinc-500">
+                agendamentos.com/
+              </span>
               <input
                 type="text"
                 value={form.watch("slug") || ""}
                 onChange={(e) => handleSlugChange(e.target.value)}
                 placeholder="seu-estabelecimento"
-                className="flex-1 px-3 py-2 border border-zinc-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-zinc-950"
+                className="flex-1 min-w-[120px] px-2 sm:px-3 py-1.5 sm:py-2 border border-zinc-300 rounded-md text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-zinc-950"
               />
             </div>
             {slugError && <p className="text-xs text-red-500">{slugError}</p>}
@@ -193,39 +148,6 @@ export const OnboardingModal: React.FC<IOnboardingModalProps> = ({
                 {form.formState.errors.slug.message}
               </p>
             )}
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">
-              Foto do Estabelecimento
-            </label>
-            <div className="relative">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageSelect}
-                className="hidden"
-                id="image-upload"
-              />
-              <label
-                htmlFor="image-upload"
-                className="flex items-center justify-center w-full p-6 border-2 border-dashed border-zinc-300 rounded-lg cursor-pointer hover:border-zinc-400 transition"
-              >
-                {imagePreview ? (
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-40 object-cover rounded"
-                  />
-                ) : (
-                  <div className="text-center">
-                    <p className="text-sm text-zinc-500">
-                      Clique para selecionar uma imagem
-                    </p>
-                  </div>
-                )}
-              </label>
-            </div>
           </div>
 
           <Input
@@ -241,7 +163,7 @@ export const OnboardingModal: React.FC<IOnboardingModalProps> = ({
             placeholder="Digite o telefone"
           />
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="flex-1">
               <TimePicker name="opening_hours" label="Horário de Abertura" />
             </div>

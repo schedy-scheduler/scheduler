@@ -146,3 +146,19 @@
     --sidebar-ring: oklch(0.439 0 0);
   }
 }
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  html {
+    font-size: 15px;
+  }
+
+  /* Improve touch targets on mobile */
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

@@ -25,10 +25,14 @@ export const Select: React.FC<ISelectProps> = ({
 
   if (!name) {
     return (
-      <div className="flex flex-col gap-1">
-        {label && <Label htmlFor={name}>{label}</Label>}
+      <div className="flex flex-col gap-1 w-full">
+        {label && (
+          <Label htmlFor={name} className="text-xs sm:text-sm">
+            {label}
+          </Label>
+        )}
         <SelectComponent>
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full text-sm">
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent className="z-[9999]">
@@ -48,13 +52,17 @@ export const Select: React.FC<ISelectProps> = ({
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <div className="flex flex-col gap-1">
-          {label && <Label htmlFor={name}>{label}</Label>}
+        <div className="flex flex-col gap-1 w-full">
+          {label && (
+            <Label htmlFor={name} className="text-xs sm:text-sm">
+              {label}
+            </Label>
+          )}
           <SelectComponent
             value={field.value || ""}
             onValueChange={field.onChange}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full text-sm">
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent className="z-[9999]">

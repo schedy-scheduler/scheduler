@@ -105,18 +105,20 @@ export const Home = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col gap-4 h-full">
+    <div className="flex-1 flex flex-col gap-3 sm:gap-4 h-full w-full overflow-x-hidden">
       <PageHeader
         title="Meus agendamentos"
         subtitle="Gerêncie seus agendamentos aqui."
       />
 
-      <Calendar
-        key={refreshKey}
-        storeId={storeId}
-        onScheduleCreate={handleCreateSchedule}
-        refreshTrigger={refreshKey}
-      />
+      <div className="flex-1 overflow-hidden">
+        <Calendar
+          key={refreshKey}
+          storeId={storeId}
+          onScheduleCreate={handleCreateSchedule}
+          refreshTrigger={refreshKey}
+        />
+      </div>
 
       {storeId && (
         <OnboardingModal

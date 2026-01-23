@@ -4,10 +4,10 @@ import { Outlet } from "react-router-dom";
 
 export const AuthLayout: React.FC = () => {
   return (
-    <div className="flex gap-2 w-screen">
+    <div className="flex flex-col md:flex-row gap-0 md:gap-2 w-full min-h-screen">
       <SidebarProvider>
         <Menu />
-        <div className="p-5 max-w-292.5 w-screen mx-auto">
+        <div className="flex-1 p-3 md:p-5 w-full overflow-x-hidden">
           <Outlet />
         </div>
       </SidebarProvider>

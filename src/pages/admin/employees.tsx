@@ -100,20 +100,22 @@ export const Employees: React.FC = () => {
         const employee = row.original;
 
         return (
-          <div className="flex items-center">
+          <div className="flex items-center gap-1 sm:gap-0">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleEdit(employee)}
+              className="h-7 sm:h-8 px-1.5 sm:px-2.5"
             >
-              <Pencil />
+              <Pencil size={16} />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleDelete(employee.id)}
+              className="h-7 sm:h-8 px-1.5 sm:px-2.5"
             >
-              <Trash2 />
+              <Trash2 size={16} />
             </Button>
           </div>
         );
@@ -127,9 +129,10 @@ export const Employees: React.FC = () => {
         title="Meus profissionais"
         subtitle="Gerêncie seus profissionais aqui."
         buttons={[
-          <Button onClick={handleAddNew}>
-            <Plus />
-            Novo profissional
+          <Button onClick={handleAddNew} size="sm" className="w-full sm:w-auto">
+            <Plus size={16} />
+            <span className="hidden sm:inline">Novo profissional</span>
+            <span className="sm:hidden">Novo</span>
           </Button>,
         ]}
       />

@@ -56,15 +56,17 @@ export const Login = () => {
   });
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full min-h-screen flex items-center justify-center p-3 sm:p-4">
       <Card className="w-full max-w-md border">
-        <CardHeader>
-          <CardTitle>Faça login com suas credênciais</CardTitle>
-          <CardDescription>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-base sm:text-lg">
+            Faça login com suas credênciais
+          </CardTitle>
+          <CardDescription className="text-xs sm:text-sm">
             Entre com seu e-mail e senha para acessar sua conta.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-4 sm:p-6">
           <FormProvider {...form}>
             <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
               <Input
@@ -79,12 +81,12 @@ export const Login = () => {
                 type="password"
               />
 
-              <Button disabled={isLoading}>
+              <Button disabled={isLoading} className="w-full">
                 {isLoading ? "Carregando..." : "Fazer login"}
               </Button>
               <div className="flex items-center gap-2">
                 <div className="w-full h-0.5 bg-zinc-200" />
-                <span className="text-[10px] font-semibold text-zinc-400">
+                <span className="text-[10px] font-semibold text-zinc-400 whitespace-nowrap">
                   OU
                 </span>
                 <div className="w-full h-0.5 bg-zinc-200" />

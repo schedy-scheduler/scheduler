@@ -110,4 +110,30 @@ export const storeService = {
       return { error: String(error) };
     }
   },
+
+  async uploadStoreImage(storeId: string, file: File) {
+    try {
+      const fileName = `${storeId}/${Date.now()}-${file.name}`;
+
+      const { data, error } = await supabase.storage
+        .from("stores")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        return { error: error.message };
+      }
+
+      // Get public URL
+      const { data: publicData } = supabase.storage
+        .from("stores")
+        .getPublicUrl(fileName);
+
+      return { data: publicData.publicUrl };
+    } catch (error) {
+      return { error: String(error) };
+    }
+  },
 };

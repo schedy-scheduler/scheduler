@@ -47,20 +47,29 @@ export const Modal: React.FC<IModalProps> = ({
           )}
         </DialogHeader>
         {children}
-        <DialogFooter className="flex justify-between">
+        <DialogFooter className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
           <div>
             {deleteButtonText && (
-              <Button variant="destructive" onClick={onDeleteButtonClick}>
+              <Button
+                variant="destructive"
+                onClick={onDeleteButtonClick}
+                className="w-full sm:w-auto"
+              >
                 {deleteButtonText}
               </Button>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-2">
             <DialogClose asChild>
-              <Button variant="outline">{cancelButtonText}</Button>
+              <Button variant="outline" className="w-full sm:w-auto">
+                {cancelButtonText}
+              </Button>
             </DialogClose>
             {confirmButtonText && (
-              <Button onClick={onConfirmButtonClick}>
+              <Button
+                onClick={onConfirmButtonClick}
+                className="w-full sm:w-auto"
+              >
                 {confirmButtonText}
               </Button>
             )}
