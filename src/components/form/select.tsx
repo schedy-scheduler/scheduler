@@ -13,6 +13,7 @@ interface ISelectProps {
   label?: string;
   placeholder?: string;
   options: Array<{ id: string | number; name: string; label?: string }>;
+  disabled?: boolean;
 }
 
 export const Select: React.FC<ISelectProps> = ({
@@ -20,6 +21,7 @@ export const Select: React.FC<ISelectProps> = ({
   label,
   placeholder,
   options,
+  disabled = false,
 }) => {
   const { control } = useFormContext();
 
@@ -31,7 +33,7 @@ export const Select: React.FC<ISelectProps> = ({
             {label}
           </Label>
         )}
-        <SelectComponent>
+        <SelectComponent disabled={disabled}>
           <SelectTrigger className="w-full text-sm">
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
@@ -61,6 +63,7 @@ export const Select: React.FC<ISelectProps> = ({
           <SelectComponent
             value={field.value || ""}
             onValueChange={field.onChange}
+            disabled={disabled}
           >
             <SelectTrigger className="w-full text-sm">
               <SelectValue placeholder={placeholder} />

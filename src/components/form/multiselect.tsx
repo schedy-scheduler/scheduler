@@ -64,13 +64,12 @@ export const MultiSelect: React.FC<IMultiSelectProps> = ({
                     selectedOptions.map((opt) => (
                       <div
                         key={opt.id}
-                        className="flex items-center gap-1 rounded bg-secondary px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs font-medium"
+                        className="flex items-center gap-0.5 rounded bg-secondary p-1 text-xs"
                       >
                         <span className="truncate">
                           {opt.label || opt.name}
                         </span>
-                        <button
-                          type="button"
+                        <XIcon
                           onClick={(e) => {
                             e.stopPropagation();
                             const newValues = selectedValues.filter(
@@ -79,10 +78,9 @@ export const MultiSelect: React.FC<IMultiSelectProps> = ({
                             field.onChange(newValues);
                             onChange?.(newValues);
                           }}
-                          className="hover:text-destructive flex-shrink-0"
-                        >
-                          <XIcon className="size-3" />
-                        </button>
+                          className="hover:text-destructive cursor-pointer transition-all"
+                          size={14}
+                        />
                       </div>
                     ))
                   ) : (
@@ -100,7 +98,7 @@ export const MultiSelect: React.FC<IMultiSelectProps> = ({
               </button>
 
               {isOpen && (
-                <div className="absolute top-full z-[9999] mt-1 w-full max-h-48 overflow-y-auto rounded-md border border-input bg-popover p-1 shadow-md">
+                <div className="absolute bottom-full z-[9999] mb-1 w-full max-h-48 overflow-y-auto rounded-md border border-input bg-popover p-1 shadow-md">
                   {options.map((option) => {
                     const isSelected = selectedValues.includes(
                       String(option.id),

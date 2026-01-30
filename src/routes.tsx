@@ -1,38 +1,12 @@
 import { Route, Routes as RoutesComponent } from "react-router-dom";
-import {
-  Customers,
-  Home,
-  Login,
-  Register,
-  Services,
-  Store,
-  Employees,
-} from "./pages";
-import { AuthLayout } from "./layout/auth";
-import { Reports } from "./pages/admin/reports";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { Scheduler } from "./pages";
+import { Success } from "./pages/success";
 
 export const Routes: React.FC = () => {
   return (
     <RoutesComponent>
-      <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <AuthLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<Home />} />
-        <Route path="reports" element={<Reports />} />
-        <Route path="customers" element={<Customers />} />
-        <Route path="store" element={<Store />} />
-        <Route path="services" element={<Services />} />
-        <Route path="employees" element={<Employees />} />
-      </Route>
+      <Route path="/:slug" element={<Scheduler />} />
+      <Route path="/:slug/success" element={<Success />} />
     </RoutesComponent>
   );
 };

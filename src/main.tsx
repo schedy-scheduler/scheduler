@@ -10,7 +10,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ToastProvider>
       <BrowserRouter>
-        <div className="h-screen w-screen">
+        <div className="max-w-195 w-full">
           <Routes />
           <ToastContainer />
         </div>

@@ -1,139 +1,93 @@
 import { supabase } from "@/lib/supabase";
 import type { Database } from "@/lib/database.types";
 
-type Store = Database["public"]["Tables"]["stores"]["Row"];
-type StoreInsert = Database["public"]["Tables"]["stores"]["Insert"];
-type StoreUpdate = Database["public"]["Tables"]["stores"]["Update"];
+export interface Store {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+export type Employee = Database["public"]["Tables"]["employees"]["Row"];
+export type Service = Database["public"]["Tables"]["services"]["Row"];
 
 export const storeService = {
-  async getByOwnerId(ownerId: string) {
+  async getStoreBySlug(slug: string): Promise<Store | null> {
     try {
       const { data, error } = await supabase
         .from("stores")
-        .select("*")
-        .eq("owner_id", ownerId)
+        .select("name, email, phone")
+        .eq("slug", slug)
         .single();
 
       if (error) {
-        return { error: error.message };
+        console.error("Error fetching store:", error);
+        return null;
       }
 
-      return { data: data as Store };
-    } catch (error) {
-      return { error: String(error) };
+      return data;
+    } catch (err) {
+      console.error("Error fetching store:", err);
+      return null;
     }
   },
 
-  async getById(id: string) {
-    try {
-      const { data, error } = await supabase
-        .from("stores")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      if (error) {
-        return { error: error.message };
-      }
-
-      return { data: data as Store };
-    } catch (error) {
-      return { error: String(error) };
-    }
-  },
-
-  async create(store: StoreInsert) {
-    try {
-      const { data, error } = await supabase
-        .from("stores")
-        .insert(store)
-        .select()
-        .single();
-
-      if (error) {
-        return { error: error.message };
-      }
-
-      return { data: data as Store };
-    } catch (error) {
-      return { error: String(error) };
-    }
-  },
-
-  async update(id: string, store: StoreUpdate) {
-    try {
-      const { data, error } = await supabase
-        .from("stores")
-        .update(store)
-        .eq("id", id)
-        .select()
-        .single();
-
-      if (error) {
-        return { error: error.message };
-      }
-
-      return { data: data as Store };
-    } catch (error) {
-      return { error: String(error) };
-    }
-  },
-
-  async delete(id: string) {
-    try {
-      const { error } = await supabase.from("stores").delete().eq("id", id);
-
-      if (error) {
-        return { error: error.message };
-      }
-
-      return { data: null };
-    } catch (error) {
-      return { error: String(error) };
-    }
-  },
-
-  async checkSlugExists(slug: string) {
+  async getStoreIdBySlug(slug: string): Promise<string | null> {
     try {
       const { data, error } = await supabase
         .from("stores")
         .select("id")
         .eq("slug", slug)
-        .maybeSingle();
+        .single();
 
       if (error) {
-        return { error: error.message };
+        console.error("Error fetching store id:", error);
+        return null;
       }
 
-      return { data: !!data };
-    } catch (error) {
-      return { error: String(error) };
+      return data.id;
+    } catch (err) {
+      console.error("Error fetching store id:", err);
+      return null;
     }
   },
 
-  async uploadStoreImage(storeId: string, file: File) {
+  async getEmployeesByStoreId(storeId: string): Promise<Employee[]> {
     try {
-      const fileName = `${storeId}/${Date.now()}-${file.name}`;
-
-      const { data, error } = await supabase.storage
-        .from("stores")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
+      const { data, error } = await supabase
+        .from("employees")
+        .select("*")
+        .eq("store_id", storeId)
+        .order("name", { ascending: true });
 
       if (error) {
-        return { error: error.message };
+        console.error("Error fetching employees:", error);
+        return [];
       }
 
-      // Get public URL
-      const { data: publicData } = supabase.storage
-        .from("stores")
-        .getPublicUrl(fileName);
+      return data || [];
+    } catch (err) {
+      console.error("Error fetching employees:", err);
+      return [];
+    }
+  },
 
-      return { data: publicData.publicUrl };
-    } catch (error) {
-      return { error: String(error) };
+  async getServicesByStoreId(storeId: string): Promise<Service[]> {
+    try {
+      const { data, error } = await supabase
+        .from("services")
+        .select("*")
+        .eq("store_id", storeId)
+        .order("name", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching services:", error);
+        return [];
+      }
+
+      return data || [];
+    } catch (err) {
+      console.error("Error fetching services:", err);
+      return [];
     }
   },
 };

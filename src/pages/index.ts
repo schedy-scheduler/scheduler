@@ -1,3 +1,1 @@
-export { Login } from "./login";
-export { Register } from "./register";
-export * from "./admin";
+export { Scheduler } from "./scheduler";
