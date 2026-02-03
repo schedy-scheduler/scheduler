@@ -5,6 +5,7 @@ import { Success } from "./pages/success";
 export const Routes: React.FC = () => {
   return (
     <RoutesComponent>
+      <Route path="/" element={<Scheduler />} />
       <Route path="/:slug" element={<Scheduler />} />
       <Route path="/:slug/success" element={<Success />} />
     </RoutesComponent>
